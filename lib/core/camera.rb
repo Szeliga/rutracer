@@ -5,14 +5,14 @@
 #  position
 module Core
   class Camera
+    include ::Utils::Convertable
     attr_accessor :position, :look_at, :fov, :aspect_ratio, :w, :u, :v,
       :half_plane_width, :half_plane_height, :corner, :to_right, :to_bottom
-    using ::Utils::Trigonometry
 
     def initialize(position, look_at, fov, aspect_ratio)
       self.position = position
       self.look_at = look_at
-      self.fov = fov
+      self.fov = deg_to_rad(fov)
       self.aspect_ratio = aspect_ratio
 
       calculate_uvw
@@ -36,7 +36,7 @@ module Core
     end
 
     def calculate_half_plane
-      self.half_plane_width = w.magnitude * Math.tan(fov.to_rad / 2)
+      self.half_plane_width = w.magnitude * Math.tan(fov / 2)
       self.half_plane_height = half_plane_width * aspect_ratio
     end
 
